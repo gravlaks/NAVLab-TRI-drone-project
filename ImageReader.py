@@ -16,7 +16,6 @@ class ImageReader():
 
     def convert_to_png(self):
         self.filepath_png = self.folder_out  + self.raw_filepath.split("/")[-1].split(".")[-2]+".png"
-        print(self.filepath_png)
         if self.raw_filepath[-3:] == "png":
             return
         

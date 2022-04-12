@@ -27,8 +27,7 @@ def get_ratio(detections):
         ###OBS: have to check this
         pixel_width = np.linalg.norm(det.corners[0]-det.corners[1])
         pixel_height = np.linalg.norm(det.corners[1]-det.corners[2])
-    print(w/pixel_width)
-    print(h/pixel_height)
+
     ratio1 = w/pixel_width
     return ratio1
 

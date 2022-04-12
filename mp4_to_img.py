@@ -1,8 +1,8 @@
 import cv2
 
 
-folder = "./thunderhill/run5_tandem/"
-mov = "DJI_0010"
+folder = "./thunderhill/run_4/"
+mov = "DJI_0004"
 filepath = folder+mov+".MOV"
 
 
@@ -35,7 +35,7 @@ def getFrame(sec):
 
     hasFrames,image = vidcap.read()
     if hasFrames:
-        cv2.imwrite(folder + "photos/"+mov+"/image_"+ str(count)+".jpg", image)     # save frame as JPG file
+        cv2.imwrite(folder +mov+"/image_"+ str(count)+".png", image)     # save frame as JPG file
     return hasFrames
 sec = 0
 frameRate = 1 #//it will capture image in each 0.5 second

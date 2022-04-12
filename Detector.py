@@ -10,6 +10,8 @@ class Result():
         self.tag_id = res.tag_id
         self.center = np.array([res.center[0]+t, res.center[1] + l])
         self.corners = res.corners
+        for i in range(len(self.corners)):
+            self.corners[i] = np.array([self.corners[i][0]+t, self.corners[i][1] + l])
 class Detector():
     def __init__(self, filepath, folder_out, tags = [0, 2]): 
         self.tags = tags
@@ -24,7 +26,6 @@ class Detector():
         start = datetime.now()
 
         for i, idxs in enumerate(self.image_idxs):
-            print("Image: ", i)
             l, r, t, b = idxs
 
             window = self.img[l:r, t:b]
@@ -35,11 +36,7 @@ class Detector():
             results = meas.detect()
             
             for result in results:
-                print("Orig", result.center)
-                print("Shift, t: ", t, " b: ", b, "l: ", l, "r: ", r)
                 res = Result(result, l, r, t, b)
-                
-                print("New center: ", res.tag_id, ": ",  res.center)
                 tag_id = res.tag_id
                 
                 if tag_id not in self.tags:

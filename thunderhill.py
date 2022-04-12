@@ -3,19 +3,17 @@ import apriltag
 import numpy as np
 print(cv2.__version__)
 
-folder = "thunderhill/run3/mph_10/photos/"
+folder = "thunderhill/run_4/DJI_0004/"
 #images = ["image49","DJI_0001", "DJI_0002", "DJI_0003"]
 #idx = 3
-image_name = "image_1"
-filepath = folder + image_name +".jpg"
+image_name = "image_23"
+filepath_png = folder + image_name +".png"
 
-image = cv2.imread(filepath)
-filepath_png = folder + "/"+image_name+".png"
-cv2.imwrite(filepath_png, image)
 
-image = cv2.imread(filepath_png)[:,:]
 
-image2 = cv2.imread(filepath_png)[400:1500, :1500]
+image = cv2.imread(filepath_png)[400:600,2400:2600]
+
+image2 = cv2.imread(filepath_png)[:2000,1900:2400]
 
 h,w, _ = image.shape
 
@@ -26,7 +24,7 @@ height = int(image.shape[0] * scale_percent / 100)
 dim = (width, height)
   
 # resize image
-#image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+image = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 gray = np.array(gray>200, dtype=np.uint8)*255
@@ -36,7 +34,7 @@ options = apriltag.DetectorOptions(families="tag36h11",
 
                                 #quad_decimate=1.0,
                                 #quad_blur=0.8
-                                #refine_pose=5.0
+                                refine_pose=5.0
                                 )
 detector = apriltag.Detector(options)
 results = detector.detect(gray)
@@ -46,7 +44,7 @@ if image2 is not None:
 
     gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
     results2 = detector.detect(gray2)
-    print("Results2", results2)
+    print("Results2", len(results2))
 
 
 

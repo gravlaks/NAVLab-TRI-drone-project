@@ -4,3 +4,4 @@ detections/
 drone_imgs/
 tag_family_36h11/
 __pycache__/
+nondetections/ 
