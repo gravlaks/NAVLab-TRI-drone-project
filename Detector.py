@@ -10,8 +10,16 @@ class Result():
         self.tag_id = res.tag_id
         self.center = np.array([res.center[0]+t, res.center[1] + l])
         self.corners = res.corners
+        self.tag_family = res.tag_family
         for i in range(len(self.corners)):
             self.corners[i] = np.array([self.corners[i][0]+t, self.corners[i][1] + l])
+
+    def rescale(self, scale_percent):
+        for i in range(len(self.corners)):
+            self.corners[i] *= 0.01*scale_percent
+
+        self.center *= 0.01*scale_percent
+        #self.center[1] *= 0.01*scale_percent
 class Detector():
     def __init__(self, filepath, folder_out, tags = [0, 2]): 
         self.tags = tags
@@ -19,19 +27,23 @@ class Detector():
         self.img = image_reader.img
         self.image_idxs = parse_img(self.img, units=2)
 
-    def detect(self):
+    def detect(self, increase_constrast=False):
         detections = []
         tags_seen = {}
 
         start = datetime.now()
 
         for i, idxs in enumerate(self.image_idxs):
+            if len(tags_seen) == 2:
+                break
             l, r, t, b = idxs
 
             window = self.img[l:r, t:b]
 
             meas = Measurement(window)
             meas.grayscale()
+            if increase_constrast:
+                meas.imadjust()
             meas.turn_binary(threshold=200)
             results = meas.detect()
             

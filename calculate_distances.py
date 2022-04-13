@@ -5,7 +5,7 @@ import numpy as np
 from relative_distances import get_relative_distance
 import matplotlib.pyplot as plt
 import cv2
-def get_rel_distances(folder_in, folder_out, png=False):
+def get_rel_distances(folder_in, folder_out=None):
 
     idx = 1
     rel_dists = []
@@ -14,8 +14,9 @@ def get_rel_distances(folder_in, folder_out, png=False):
     images = []
     threshold = 100
     non_detected = []
+    one_detections = 0
     while True:
-        if png:
+        if folder_out is None:
             filepath = folder_in+"image_"+str(idx)+".png"
         else:
             filepath = folder_in+"image_"+str(idx)+".jpg"
@@ -25,7 +26,7 @@ def get_rel_distances(folder_in, folder_out, png=False):
             break
         
         detector = Detector(filepath, folder_out)
-        detections = detector.detect()
+        detections = detector.detect(increase_constrast=True)
         det1 = [det for det in detections if det.tag_id == 0]
         det2 = [det for det in detections if det.tag_id == 2]
 
@@ -40,16 +41,23 @@ def get_rel_distances(folder_in, folder_out, png=False):
         else:
             print("non detection", filepath)
             print(len(det1), len(det2))
+            if len(det1) or len(det2):
+                one_detections+=1
             non_detected.append(filepath)
         idx+=1
+
+    print("One: ", one_detections, "avg: ", one_detections/idx)
     rel_dists = np.array(rel_dists)
     det1s = np.array(det1s)
     det2s = np.array(det2s)
 
     return rel_dists, det1s, det2s, images
 
-def plot_relative_distances(rel_dists):
+def plot_relative_distances(rel_dists, filepath):
+
+    fig = plt.figure()
     plt.plot(rel_dists[:, 0], rel_dists[:, 1])
+    plt.savefig(filepath, dpi=fig.dpi)
     plt.show()
 
 def plot_locations(pos1, pos2):
@@ -88,12 +96,10 @@ def plot_result(image, det1, det2):
         # draw the tag family on the image
     
 if __name__ == '__main__':
-    folder_in = "thunderhill/run_4/DJI_0007/"
-    #image_name = "image_14"
-    #filepath = folder_in + image_name +".jpg"
-    folder_out = folder_in+"pngs/"
+    folder_in = "thunderhill/run5_tandem/photos/DJI_0010/"
+    rel_dist_filepath = "thunderhill/plots/run5_high.png"
 
-    rel_dists, det1s, det2s, images = get_rel_distances(folder_in=folder_in, folder_out=folder_in, png=True)
-    plot_relative_distances(rel_dists)
-    plot_locations(np.array([d.center for d in det1s]), np.array([d.center for d in det2s]))
-    plot_imgs(images, det1s, det2s)
+    rel_dists, det1s, det2s, images = get_rel_distances(folder_in=folder_in)
+    plot_relative_distances(rel_dists, filepath=rel_dist_filepath)
+    #plot_locations(np.array([d.center for d in det1s]), np.array([d.center for d in det2s]))
+    #plot_imgs(images, det1s, det2s)

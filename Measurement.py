@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import apriltag
 from configs import *
+from imadjust import imadjust
 
 class Measurement():
     def __init__(self, raw_img):
@@ -30,6 +31,8 @@ class Measurement():
         return self.results
     def reset(self):
         self.img = np.copy(self.raw_img)
+    def imadjust(self):
+        self.img = imadjust(self.img, tol=2)
 
 
 if __name__=='__main__':
