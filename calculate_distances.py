@@ -31,6 +31,7 @@ def get_rel_distances(folder_in, folder_out=None):
         det2 = [det for det in detections if det.tag_id == 2]
 
         if len(det1) and len(det2):
+            
             det1s.append(det1[0])
             det2s.append(det2[0])
 
@@ -96,8 +97,8 @@ def plot_result(image, det1, det2):
         # draw the tag family on the image
     
 if __name__ == '__main__':
-    folder_in = "thunderhill/run5_tandem/photos/DJI_0010/"
-    rel_dist_filepath = "thunderhill/plots/run5_high.png"
+    folder_in = "thunderhill/run3/mph_10/photos/pngs/"
+    rel_dist_filepath = "thunderhill/plots/run3_low.png"
 
     rel_dists, det1s, det2s, images = get_rel_distances(folder_in=folder_in)
     plot_relative_distances(rel_dists, filepath=rel_dist_filepath)

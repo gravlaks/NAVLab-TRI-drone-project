@@ -44,7 +44,7 @@ class Detector():
             meas.grayscale()
             if increase_constrast:
                 meas.imadjust()
-            meas.turn_binary(threshold=200)
+            meas.turn_binary_adaptive()
             results = meas.detect()
             
             for result in results:
@@ -59,7 +59,7 @@ class Detector():
                 tags_seen[tag_id] = True
                 detections.append(res)
                 
-        print("Full detection", datetime.now()-start)
+        print("Timing", datetime.now()-start)
         return detections
 
 
