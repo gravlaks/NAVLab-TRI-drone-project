@@ -3,5 +3,8 @@ data/
 detections/
 drone_imgs/
 tag_family_36h11/
+tag_family_16h5/
 __pycache__/
 nondetections/ 
+venv/
+PyTorchYOLOv3/

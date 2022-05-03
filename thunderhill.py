@@ -7,7 +7,7 @@ print(cv2.__version__)
 folder = "thunderhill/run5_tandem/photos/DJI_0010/"
 #images = ["image49","DJI_0001", "DJI_0002", "DJI_0003"]
 #idx = 3
-image_name = "image_71"
+image_name = "image_16"
 filepath_png = folder + image_name +".png"
 
 
@@ -17,7 +17,7 @@ filepath_png = folder + image_name +".png"
 
 detector = Detector(filepath_png, None)
 
-results = detector.detect(increase_constrast=True)
+results = detector.detect(increase_constrast=False, adaptive_threshold=False)
 image = detector.img
 
 print("Results", len(results))

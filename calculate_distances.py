@@ -5,7 +5,7 @@ import numpy as np
 from relative_distances import get_relative_distance
 import matplotlib.pyplot as plt
 import cv2
-def get_rel_distances(folder_in, folder_out=None):
+def get_rel_distances(folder_in, increase_contrast, adaptive_threshold, turn_binary):
 
     idx = 1
     rel_dists = []
@@ -15,23 +15,24 @@ def get_rel_distances(folder_in, folder_out=None):
     threshold = 100
     non_detected = []
     one_detections = 0
+    teslas_detected, rentals_detected, detections_cnt = 0, 0, 0
+
     while True:
-        if folder_out is None:
-            filepath = folder_in+"image_"+str(idx)+".png"
-        else:
-            filepath = folder_in+"image_"+str(idx)+".jpg"
+        filepath = folder_in+"image_"+str(idx)+".png"
         if not exists(filepath) or idx == threshold:
-            print(filepath, "does not exist. Quitting")
-            print("Or top threshold,  ", threshold, " reached")
+            #print(filepath, "does not exist. Quitting")
+            #print("Or top threshold,  ", threshold, " reached")
             break
         
-        detector = Detector(filepath, folder_out)
-        detections = detector.detect(increase_constrast=True)
+        detector = Detector(filepath)
+        detections = detector.detect(increase_contrast, adaptive_threshold, turn_binary=turn_binary)
         det1 = [det for det in detections if det.tag_id == 0]
         det2 = [det for det in detections if det.tag_id == 2]
-
+        teslas_detected += len(det1)
+        rentals_detected += len(det2)
+        print(filepath, len(det1), len(det2))
         if len(det1) and len(det2):
-            
+            detections_cnt+=1
             det1s.append(det1[0])
             det2s.append(det2[0])
 
@@ -40,14 +41,17 @@ def get_rel_distances(folder_in, folder_out=None):
             images.append(detector.img)
 
         else:
-            print("non detection", filepath)
-            print(len(det1), len(det2))
+            #print("tesla: ", len(det1),"rental: ", len(det2))
             if len(det1) or len(det2):
                 one_detections+=1
             non_detected.append(filepath)
         idx+=1
 
-    print("One: ", one_detections, "avg: ", one_detections/idx)
+    # print("One: ", one_detections, "avg: ", one_detections/idx)
+    print("Detection rate: ", detections_cnt, "avg: ", (detections_cnt)/(idx-1))
+    print("Teslas: ", teslas_detected, "avg: ", teslas_detected/(idx-1))
+    print("Rentals: ", rentals_detected, "avg: ", rentals_detected/(idx-1))
+    print(f"& {teslas_detected/(idx-1)} & {rentals_detected/(idx-1)} & {(detections_cnt)/(idx-1)}\\\\")
     rel_dists = np.array(rel_dists)
     det1s = np.array(det1s)
     det2s = np.array(det2s)
@@ -97,10 +101,17 @@ def plot_result(image, det1, det2):
         # draw the tag family on the image
     
 if __name__ == '__main__':
-    folder_in = "thunderhill/run3/mph_10/photos/pngs/"
-    rel_dist_filepath = "thunderhill/plots/run3_low.png"
+    folder_in = "thunderhill/run5_tandem/photos/DJI_0010/"
+    assert(folder_in[-1] == "/")
+    rel_dist_filepath = "thunderhill/plots/run5.png"
+    
+    rel_dists, det1s, det2s, images = get_rel_distances(folder_in=folder_in, 
+                        adaptive_threshold=False, increase_contrast=False, turn_binary=True)
+    bools = [True, False]
+    #for bool in bools:
+    #    for bool2 in bools:
+    #        print(bool, bool2)
 
-    rel_dists, det1s, det2s, images = get_rel_distances(folder_in=folder_in)
-    plot_relative_distances(rel_dists, filepath=rel_dist_filepath)
+    #plot_relative_distances(rel_dists, filepath=rel_dist_filepath)
     #plot_locations(np.array([d.center for d in det1s]), np.array([d.center for d in det2s]))
     #plot_imgs(images, det1s, det2s)

@@ -1,6 +1,6 @@
 import numpy as np
 import bisect
-from numba import jit
+#from numba import jit
 
 @jit
 def imadjust(src, tol=1, vin=[0,255], vout=(0,255)):

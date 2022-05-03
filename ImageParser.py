@@ -12,10 +12,10 @@ def parse_img( img, units=3):
     windows = []
     for i in range(units):
         for j in range(units):
-            t = dx*i
-            b = dx*(i+2)
-            l = dy*(j)
-            r = dy*(j+2)
+            t = dy*i
+            b = dy*(i+2)
+            l = dx*(j)
+            r = dx*(j+2)
 
             windows.append((l, r, t, b))
     return windows

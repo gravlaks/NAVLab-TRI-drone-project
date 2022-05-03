@@ -34,7 +34,7 @@ def get_ratio(detections):
 def get_relative_distance(detections):
     ratio = get_ratio(detections)
     det1 = [det for det in detections if det.tag_id == 2][0]
-    det2 = [det for det in detections if det.tag_id == 0][0]
+    det2 = [det for det in detections if det.tag_id == 0][0] #tesla
 
     relative_distance_px = det2.center - det1.center
     relative_distance = ratio*relative_distance_px

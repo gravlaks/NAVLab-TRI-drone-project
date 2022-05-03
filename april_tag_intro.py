@@ -58,7 +58,7 @@ for r in results:
     tagFamily = r.tag_family.decode("utf-8")
     cv2.putText(image, tagFamily, (ptA[0], ptA[1] - 15),
         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-    print("[INFO] tag family: {}".format(tagFamily))
+    print("[INFO] tag family: {}".format(tagFamily), f"Id: {r.tag_id}")
 # show the output image after AprilTag detection
 
 
