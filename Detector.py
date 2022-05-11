@@ -42,7 +42,7 @@ class Detector():
         detections = []
         tags_seen = {}
         visualize = False
-        self.image_idxs = parse_img(self.img, units=8)
+        self.image_idxs = parse_img(self.img, units=4)
 
 
         start = datetime.now()
@@ -78,7 +78,7 @@ class Detector():
                 tag_id = res.tag_id
                 
                 if tag_id not in self.tags:
-                    print("unseen apriltag", tag_id)
+                    #print("unseen apriltag", tag_id)
                     continue
                 if tag_id in tags_seen:
                     continue

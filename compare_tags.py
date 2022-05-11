@@ -7,20 +7,27 @@ from cv2utils import draw_detections, rescale
 
 from os import listdir
 from os.path import isfile, join
-folder = "data/tag_comparison/pngs"
+folder = "data/tag_comparison/tag16h5_comparison/"
 dir_files= [f for f in listdir(folder) if isfile(join(folder, f))]
-filepaths = [folder + "/"+file for file in dir_files]
+filepaths = [folder+file for file in dir_files]
 
 
-tag_families = ["tag36h11", "tag16h5"]
-scale_percents = [100]
+tag_families = ["tag16h5"]
+#scale_percents = [10,9, 8,7, 6, 5]
+scale_percents = [20,19, 18, 17, 16, 15, 14]
+gaussian_blur = True
 for filepath_png in filepaths:
 
     for scale_percent in scale_percents:
+        
         for tag_family in tag_families:
             image = cv2.imread(filepath_png)
+
+            
             image = rescale(image, scale_percent )
-            print(image.shape)
+            if gaussian_blur:
+                image = cv2.blur(image,(5,5))
+
             detector = Detector(img=image)
 
             results = detector.detect(increase_constrast=False, 

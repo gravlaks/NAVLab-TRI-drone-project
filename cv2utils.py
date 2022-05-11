@@ -17,6 +17,15 @@ def rescale(img, scale_percent):
 
     return image
 
+def fit_to_screen(img):
+    h, w = img.shape[:2]
+
+    max_height = 900.
+    max_width = 2000.
+
+    scale_percent = min(100*max_height/h, 100*max_width/w)
+    img = rescale(img, scale_percent)
+    return img
 
 def draw_detections(image, results, extra_text=""):
     h, w = image.shape[:2]
