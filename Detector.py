@@ -38,11 +38,11 @@ class Detector():
         else:
             self.img = img
 
-    def detect(self, increase_constrast=False, adaptive_threshold=True, tag_family = "tag36h11", turn_binary=True):
+    def detect(self, increase_constrast=False, adaptive_threshold=False, tag_family = "tag36h11", turn_binary=True, units=4):
         detections = []
         tags_seen = {}
         visualize = False
-        self.image_idxs = parse_img(self.img, units=4)
+        self.image_idxs = parse_img(self.img, units=units)
 
 
         start = datetime.now()

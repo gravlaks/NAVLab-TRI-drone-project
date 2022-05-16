@@ -12,7 +12,7 @@ def get_rel_distances(folder_in, increase_contrast, adaptive_threshold, turn_bin
     det1s = []
     det2s = []
     images = []
-    threshold = 100
+    threshold = 300
     non_detected = []
     one_detections = 0
     teslas_detected, rentals_detected, detections_cnt = 0, 0, 0
@@ -101,17 +101,13 @@ def plot_result(image, det1, det2):
         # draw the tag family on the image
     
 if __name__ == '__main__':
-    folder_in = "thunderhill/run5_tandem/photos/DJI_0010/"
+    folder_in = "thunderhill/run5_tandem/photos/DJI_0009/"
     assert(folder_in[-1] == "/")
     rel_dist_filepath = "thunderhill/plots/run5.png"
     
     rel_dists, det1s, det2s, images = get_rel_distances(folder_in=folder_in, 
                         adaptive_threshold=False, increase_contrast=False, turn_binary=True)
-    bools = [True, False]
-    #for bool in bools:
-    #    for bool2 in bools:
-    #        print(bool, bool2)
-
-    #plot_relative_distances(rel_dists, filepath=rel_dist_filepath)
+  
+    plot_relative_distances(rel_dists, filepath=rel_dist_filepath)
     #plot_locations(np.array([d.center for d in det1s]), np.array([d.center for d in det2s]))
     #plot_imgs(images, det1s, det2s)

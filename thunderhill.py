@@ -7,7 +7,7 @@ print(cv2.__version__)
 folder = "thunderhill/run5_tandem/photos/DJI_0010/"
 #images = ["image49","DJI_0001", "DJI_0002", "DJI_0003"]
 #idx = 3
-image_name = "image_16"
+image_name = "image_29"
 filepath_png = folder + image_name +".png"
 
 
@@ -57,7 +57,7 @@ for r in results:
     tagFamily = r.tag_family.decode("utf-8")
     cv2.putText(image, tagFamily, (ptA[0], ptA[1] - 15),
         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-    print("[INFO] tag family: {}".format(tagFamily))
+    print("[INFO] tag family: {}".format(tagFamily), r.tag_id)
 # show the output image after AprilTag detection
 
 
