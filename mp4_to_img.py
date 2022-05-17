@@ -1,8 +1,8 @@
 import cv2
 
 
-folder = "./thunderhill/run_4/"
-mov = "DJI_0004"
+folder = "./thunderhill/run5_tandem/"
+mov = "DJI_0009"
 filepath = folder+mov+".MOV"
 
 
@@ -31,20 +31,23 @@ def video_to_mp4(input, output, fps: int = 0, frame_size: tuple = (), fourcc: st
 
 vidcap = cv2.VideoCapture(filepath)
 def getFrame(sec):
-    vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000)
+    vidcap.set(cv2.CAP_PROP_POS_MSEC,sec*1000, cv2.CAP_PROP_BUFFERSIZE)
 
     hasFrames,image = vidcap.read()
     if hasFrames:
-        cv2.imwrite(folder +mov+"/image_"+ str(count)+".png", image)     # save frame as JPG file
+        out_folder = folder +mov+"/image_"+ str(count)+".png"
+        out_folder = folder+"/dt2e-1"+"/image_"+ str(count)+".png"
+        cv2.imwrite(out_folder, image)     # save frame as JPG file
     return hasFrames
-sec = 0
-frameRate = 1 #//it will capture image in each 0.5 second
+sec = 7
+frameRate = 0.1 #//it will capture image in each 0.5 second
 count=1
 success = getFrame(sec)
 print(success)
 while success:
     print(count)
     count = count + 1
+    
     sec = sec + frameRate
     sec = round(sec, 2)
     success = getFrame(sec)

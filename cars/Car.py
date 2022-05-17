@@ -2,7 +2,7 @@ import numpy as np
 from sift.retrieve_center import AprilTagSift
 from cars.relative_distances import get_ratio
 from sift.retrieve_center import get_center_w_sift, AprilTagSift
-
+from Detector import Detector
 class Car:
     def __init__(self, tag_id, tag_family, dynamic_model, feature_det = None):
         ## Pixel pos and velocity
@@ -16,9 +16,9 @@ class Car:
         self.feature_det = feature_det
     def predict(self, dt):
 
-        return self.dyn_model.f(self.state, None, dt)
+        self.state = self.dyn_model.f(self.state, None, dt)
 
-    def update_state(self, detections, img=None, dt=1):
+    def update_state(self, detections, img, dt, low_x = 0, low_y = 0):
         det = [det for det in detections if det.tag_id == self.tag_id]
         if not len(det):
             return False
@@ -27,24 +27,37 @@ class Car:
             self.sift_tag = AprilTagSift(self.detection, self.feature_det, img)
 
 
-        new_c = self.detection.center.reshape((-1, 1))
+        new_c = self.detection.center.reshape((-1, 1)) + np.array([low_x, low_y]).reshape((-1, 1))
         self.ratio = get_ratio(self)
 
         self.update_trajectory(new_c, dt)
         return True
 
-    def update_state_sift(self, img, dt=1):
-        threshold = 500
+    def update_state_apriltag(self, img, dt):
+        search_area, low_x, low_y = self.get_search_area(img, 400)
+
+        detector = Detector(img = search_area)
+        detections = detector.detect(turn_binary=True, units=1)
+        
+        return self.update_state(detections, img, dt, low_x=low_x, low_y=low_y)
+
+    def get_search_area(self, img, threshold):
+        threshold = threshold
+        #print("current state: ", self.state)
         c = self.get_center().flatten()
-        predicted_c = self.predict(dt)[:2]
-        print("c", c, "pred c", predicted_c)
-        low_x, low_y = predicted_c.flatten() - threshold*np.ones((2, ))
-        high_x, high_y = predicted_c.flatten() + threshold*np.ones((2, ))
+        
+        low_x, low_y = c.flatten() - threshold*np.ones((2, ))
+        high_x, high_y = c.flatten() + threshold*np.ones((2, ))
         low_x, high_x, low_y, high_y = int(max(low_x, 0)), int(min(high_x, img.shape[1])), int(max(low_y, 0)), int(min(high_y, img.shape[0]))
 
         search_area = img[low_y:high_y, low_x:high_x]
+        return search_area, low_x, low_y
+            
+    def update_state_sift(self, img, dt=1):
+        search_area, low_x, low_y = self.get_search_area(img, 400)
+
         new_c = get_center_w_sift(search_area, self.sift_tag)+ np.array([low_x, low_y])
-        print("actual c", new_c)
+        #print("actual c", new_c)
         self.update_trajectory(new_c, dt)
     def update_trajectory(self, c, dt):
         upd_state = np.vstack((
