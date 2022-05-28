@@ -38,10 +38,9 @@ class Detector():
         else:
             self.img = img
 
-    def detect(self, increase_constrast=False, adaptive_threshold=False, tag_family = "tag36h11", turn_binary=True, units=4):
+    def detect(self, adaptive_threshold=False, tag_family = "tag36h11", turn_binary=True, units=4, visualize=False):
         detections = []
         tags_seen = {}
-        visualize = False
         self.image_idxs = parse_img(self.img, units=units)
 
 
@@ -62,14 +61,13 @@ class Detector():
                 #new_window = window[y1:y2,x1:x2]
             meas = Measurement(window, tag_family=tag_family)
             meas.grayscale()
-            if increase_constrast:
-                raise NotImplemented
+
             if turn_binary:
                 if adaptive_threshold:
                     meas.turn_binary_adaptive()
-                elif False:
+                else:
                     meas.turn_binary()
-                elif True:
+                if False:
                     meas.turn_binary_const(220)
             results = meas.detect()
             
@@ -84,8 +82,10 @@ class Detector():
                     continue
                 tags_seen[tag_id] = True
                 detections.append(res)
+            
             if visualize:
-                pass
+                cv2.imshow('frame meas', meas.img)
+                cv2.waitKey(0)
                 #cv2.imshow(f"Image", meas.img)
                 #cv2.waitKey(0)
         #print("Timing", datetime.now()-start)

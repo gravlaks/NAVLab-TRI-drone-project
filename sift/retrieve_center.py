@@ -71,6 +71,7 @@ def get_angle(good, kps_ref, kps_2):
 def get_center_w_sift(img2, tag_ref):
     gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
     kps_img2, des2 = tag_ref.feature_det.detectAndCompute(gray2,None)
+    print(len(kps_img2))
     good = get_matches_lowe_ratio(tag_ref.des, des2, 0.85, False, tag_ref.img, gray2, tag_ref.kps, kps_img2)
     angle = get_angle(good, tag_ref.kps, kps_img2)
     c = get_center(good, angle, kps_2=kps_img2, tag_ref=tag_ref)

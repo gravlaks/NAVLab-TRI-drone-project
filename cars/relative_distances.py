@@ -4,6 +4,7 @@ def get_ratio(car):
     """
     ratio is m/px
     """
+    return 1
     det = car.detection
 
     testing_day="thunderhill_04_07"
@@ -26,6 +27,7 @@ def get_ratio(car):
         pixel_height = np.linalg.norm(det.corners[1]-det.corners[2])
 
     ratio1 = w/pixel_width
+    return 1
     return ratio1
 
 

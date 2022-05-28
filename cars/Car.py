@@ -33,11 +33,11 @@ class Car:
         self.update_trajectory(new_c, dt)
         return True
 
-    def update_state_apriltag(self, img, dt):
+    def update_state_apriltag(self, img, dt, units=1, tag_family="tag16h5"):
         search_area, low_x, low_y = self.get_search_area(img, 400)
 
         detector = Detector(img = search_area)
-        detections = detector.detect(turn_binary=True, units=1)
+        detections = detector.detect(turn_binary=True, units=units, tag_family=tag_family)
         
         return self.update_state(detections, img, dt, low_x=low_x, low_y=low_y)
 
@@ -51,14 +51,23 @@ class Car:
         low_x, high_x, low_y, high_y = int(max(low_x, 0)), int(min(high_x, img.shape[1])), int(max(low_y, 0)), int(min(high_y, img.shape[0]))
 
         search_area = img[low_y:high_y, low_x:high_x]
+        if search_area.shape[0]<50 or search_area.shape[1]<50:
+            return img, 0, 0
+        assert(search_area.shape[0]>50 and search_area.shape[1] > 50), search_area.shape
         return search_area, low_x, low_y
             
     def update_state_sift(self, img, dt=1):
         search_area, low_x, low_y = self.get_search_area(img, 400)
 
+        print(search_area.shape)
         new_c = get_center_w_sift(search_area, self.sift_tag)+ np.array([low_x, low_y])
         #print("actual c", new_c)
-        self.update_trajectory(new_c, dt)
+        if np.any(np.isnan(new_c)):
+            return False
+        else:
+            self.update_trajectory(new_c, dt)
+
+            return True
     def update_trajectory(self, c, dt):
         upd_state = np.vstack((
             c.reshape((-1, 1)),
