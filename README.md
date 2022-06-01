@@ -14,11 +14,11 @@ The following videos are tracked using 1 apriltag detection and then SIFT detect
 
 *Flightroom tracking*
 
-![Flightroom: Tracking with SIFT](plots/gifs/flightroom.gif)
+![Flightroom: Tracking with SIFT](videos/gifs/flightroom.gif)
 
 *Thunderhill tracking*
 
-![Thunderhill: Tracking with SIFT](plots/gifs/thunderhill.gif)
+![Thunderhill: Tracking with SIFT](videos/gifs/thunderhill.gif)
 
 
 ## Apriltag tag comparisons

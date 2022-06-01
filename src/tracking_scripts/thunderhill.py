@@ -87,7 +87,7 @@ def get_rel_distances(folder_in, visualize=True):
     rel_dists = np.array(rel_dists)
     print(len(rel_dists))
     if visualize:
-        imageio.mimsave('../plots/gifs/thunderhill_1.gif', images, fps=60)
+        imageio.mimsave('../videos/gifs/thunderhill_1.gif', images, fps=60)
 
     return rel_dists
 
