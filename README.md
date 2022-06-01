@@ -30,7 +30,7 @@ The following videos are tracked using 1 apriltag detection and then SIFT detect
 
 *Tag families at low resolution*
 
-![Tag family comparison](plots/16h5_vs_36h11/uniq_fam_misdetections.png)
+![Tag family comparison](plots/16h5_vs_36h11/uniq_fam_detections.png)
 
 
 ## SIFT detections
