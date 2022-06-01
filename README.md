@@ -30,11 +30,11 @@ The following videos are tracked using 1 apriltag detection and then SIFT detect
 
 *Tag families at low resolution*
 
-![Tag family comparison](plots/16h5_vs36h11/uniq_fam_detections.png.gif)
+![Tag family comparison](plots/16h5_vs_36h11/uniq_fam_misdetections.png)
 
 
 ## SIFT detections
 
 SIFT detect and match on arbitrary image: 
 
-![SIFT matches](/home/torstein/Stanford/nav_lab/april_tags/images/sift/matches_sift.png)
+![SIFT matches](images/sift/matches_sift.png)
