@@ -4,11 +4,12 @@
 
 ## Introduction
 
-The goal of this repository is to post process drone images/ web cam images in order to obtain relative distance measurements. Multiple approaches have been investigated, such as apriltag detection, feature detection and color segmentation.
+The software in this repository processes drone images/ web cam images in order to obtain relative distance measurements.
+Multiple approaches for detection have been investigated, such as apriltag detection, feature detection and color segmentation.
 
-## Tracking examples
+## Tracking videos
 
-The following plots are tracked using 1 apriltag detection and then SIFT detection: 
+The following videos are tracked using 1 apriltag detection and then SIFT detection to generate the relative vector visualized below. 
 
 
 *Flightroom tracking*
@@ -18,3 +19,22 @@ The following plots are tracked using 1 apriltag detection and then SIFT detecti
 *Thunderhill tracking*
 
 ![Thunderhill: Tracking with SIFT](plots/gifs/thunderhill.gif)
+
+
+## Apriltag tag comparisons
+
+
+*Tag family 16h5: Id comparison*
+
+![Tag family 16h5, tag id comparison](plots/16h5_comparison.png)
+
+*Tag families at low resolution*
+
+![Tag family comparison](plots/16h5_vs36h11/uniq_fam_detections.png.gif)
+
+
+## SIFT detections
+
+SIFT detect and match on arbitrary image: 
+
+![SIFT matches](/home/torstein/Stanford/nav_lab/april_tags/images/sift/matches_sift.png)
