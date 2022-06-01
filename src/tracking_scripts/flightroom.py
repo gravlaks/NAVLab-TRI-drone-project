@@ -113,7 +113,7 @@ def get_rel_distances(bag_filename, MAX_TIME, visualize=True):
     rel_dists = np.array(rel_dists).squeeze()
     print(rel_dists.shape)
     if visualize:
-        imageio.mimsave('../plots/gifs/flightroom.gif', final_images, fps=60)
+        imageio.mimsave('../plots/gifs/flightroom1.gif', final_images, fps=60)
     np.save("../data/flightroom_traj/flightroom1", rel_dists)
     return rel_dists
 

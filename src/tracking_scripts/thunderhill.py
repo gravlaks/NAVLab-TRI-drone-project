@@ -22,7 +22,7 @@ def get_rel_distances(folder_in, visualize=True):
 
     rel_dists = []
 
-    N = 100
+    N = 200
 
     feature_det = cv2.SIFT_create()
     tag_family="tag36h11"
@@ -43,7 +43,7 @@ def get_rel_distances(folder_in, visualize=True):
         if not exists(filepath):
             print(filepath, "does not exist. Quitting")
             break
-        img = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+        img = cv2.imread(filepath)#, cv2.IMREAD_GRAYSCALE)
         print("image reading", datetime.now()-t1)
         detect1, detect2 = False, False
         search_threshold = 100
@@ -77,7 +77,7 @@ def get_rel_distances(folder_in, visualize=True):
         if visualize:
             draw_relative(img, [car1, car2], thickness=15)
             img_to_show, _ = fit_to_screen(img)
-            img_to_show = rescale(img_to_show, 10)
+            img_to_show = rescale(img_to_show, 40)
             images.append(img_to_show)
             #cv2.imshow("frame", img_to_show)
             #cv2.waitKey(1)
@@ -87,7 +87,7 @@ def get_rel_distances(folder_in, visualize=True):
     rel_dists = np.array(rel_dists)
     print(len(rel_dists))
     if visualize:
-        imageio.mimsave('../plots/gifs/thunderhill.gif', images, fps=60)
+        imageio.mimsave('../plots/gifs/thunderhill_1.gif', images, fps=60)
 
     return rel_dists
 
