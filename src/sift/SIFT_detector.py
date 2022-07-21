@@ -5,7 +5,7 @@ from cv2_tools.cv2utils import rescale, fit_to_screen
 
 def get_kps_and_descriptors(img, draw = False):
 
-
+    raise Exception
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     sift = cv2.SIFT_create()
     kps, des = sift.detectAndCompute(gray,None)
@@ -20,7 +20,7 @@ def get_matches_lowe_ratio(des1, des2, lowe_ratio = 0.75, draw=False, img1=None,
     except Exception as e:
         print(e)
     good = []
-    if len(matches[0]) <2:
+    if len(matches) <2:
         return []
     
 

@@ -1,11 +1,12 @@
 import numpy as np
+from cv2_tools.cv2utils import draw_detections, drawbox
 from sift.retrieve_center import AprilTagSift
 from cars.relative_distances import get_ratio
 from sift.retrieve_center import get_center_w_sift, AprilTagSift
 from apriltag_tools.Detector import Detector
 import cv2
 class Car:
-    def __init__(self, tag_id, tag_family, dynamic_model, size=8.47e-2,feature_det = None):
+    def __init__(self, tag_id, tag_family, dynamic_model, size=9e-2,feature_det = None):
         ## Pixel pos and velocity
         self.state = np.zeros((4, 1))
         self.trajectory = []
@@ -21,6 +22,8 @@ class Car:
 
     def update_state(self, detections, img, dt, low_x = 0, low_y = 0):
         det = [det for det in detections if det.tag_id == self.tag_id]
+        for detect in detections:
+            print(detect.tag_id, self.tag_id)
         if not len(det):
             return False
         self.detection = det[0]
@@ -35,13 +38,27 @@ class Car:
         return True
 
     def set_ratio(self):
-        px_side = np.linalg.norm(np.array(self.detection.corners[1])-np.array(self.detection.corners[0]))
-        self.ratio = self.size/px_side
-    def update_state_apriltag(self, img, dt, units=1, tag_family="tag16h5", threshold=400):
+        #self.ratio=0.005#495325200310615
+        #return 
+        px_dist = np.median(np.linalg.norm(np.array([
+            self.detection.corners[1]-self.detection.corners[0], 
+            self.detection.corners[2]-self.detection.corners[1], 
+            self.detection.corners[3]-self.detection.corners[2],
+            self.detection.corners[0]-self.detection.corners[3]
+        ]).squeeze(), axis=1))
+        
+        self.ratio = self.size/px_dist
+        
+        #radial correction
+        #radial_correction = np.abs(self.get_center()[0])/17000+ np.abs(self.get_center()[1])/4000
+        #self.ratio*= (1-radial_correction)
+    def update_state_apriltag(self, img, dt, units=1, tag_family="tag16h5", threshold=400, visualize=False):
         search_area, low_x, low_y = self.get_search_area(img, threshold)
 
         detector = Detector(img = search_area)
         detections = detector.detect(turn_binary=True, units=units, tag_family=tag_family)
+        if visualize:
+            draw_detections(img, detections, rescale=False, low_x=low_x, low_y=low_y)
         return self.update_state(detections, img, dt, low_x=low_x, low_y=low_y)
 
     def get_search_area(self, img, threshold):
@@ -56,7 +73,6 @@ class Car:
         high_y = min(int(max(0, high_y)), img.shape[0])
         
 
-        print(low_x, low_y, high_x, high_y, img.shape)
 
         if high_y-low_y<=50:
             low_y -= threshold
@@ -82,12 +98,11 @@ class Car:
     def update_state_sift(self, img, dt, threshold=400):
         search_area, low_x, low_y = self.get_search_area(img, threshold)
 
-        print(search_area.shape, low_x, low_y)
         new_c, detect = get_center_w_sift(search_area, self.sift_tag)
     
         if not detect or np.any(np.isnan(new_c)):
-            cv2.imshow("frame", img)
-            cv2.waitKey(0)
+            #cv2.imshow("frame", img)
+            #cv2.waitKey(0)
             return False
         else:
             assert(new_c.shape==(2,))
